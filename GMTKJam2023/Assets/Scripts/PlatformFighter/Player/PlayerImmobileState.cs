@@ -1,25 +1,27 @@
+using UnityEngine;
+
 namespace PlatformFighter.Player
 {
     public class PlayerImmobileState : PlayerState
     {
         public override void EnterState()
         {
-            throw new System.NotImplementedException();
+            PlayerPlatform.Rigidbody2D.velocity = Vector2.zero;
         }
 
         public override void ExitState()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override void ProcessState()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override void ProcessStateFixed()
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

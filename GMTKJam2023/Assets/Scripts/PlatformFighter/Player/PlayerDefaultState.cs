@@ -1,25 +1,34 @@
+using UnityEngine;
+
 namespace PlatformFighter.Player
 {
     public class PlayerDefaultState : PlayerState
     {
+        [SerializeField] private float _movementSpeed;
+        
         public override void EnterState()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override void ExitState()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override void ProcessState()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override void ProcessStateFixed()
         {
-            throw new System.NotImplementedException();
+            Movement();
+        }
+
+        private void Movement()
+        {
+            PlayerPlatform.Rigidbody2D.velocity = PlayerPlatform.MovementDirection * _movementSpeed;
         }
     }
 }

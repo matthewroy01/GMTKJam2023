@@ -1,11 +1,16 @@
+using System;
 using MHR.StateMachine;
 using PlatformFighter.Input;
 using UnityEngine;
 
 namespace PlatformFighter.Player
 {
+    [RequireComponent(typeof(PlayerImmobileState), typeof(PlayerDefaultState), typeof(Rigidbody2D))]
     public class PlayerPlatform : MonoBehaviour
     {
+        public Rigidbody2D Rigidbody2D => _rigidbody2D;
+        public Vector2 MovementDirection => _movementDirection;
+        
         [SerializeField] private Rigidbody2D _rigidbody2D;
         [Header("States")]
         [SerializeField] private PlayerImmobileState _immobileState;
@@ -16,6 +21,9 @@ namespace PlatformFighter.Player
 
         private void Awake()
         {
+            _immobileState.SetPlayerPlatform(this);
+            _defaultState.SetPlayerPlatform(this);
+            
             _stateMachine = new StateMachine(_immobileState, 
                 new Connection(_immobileState, _defaultState),
                 new Connection(_defaultState, _immobileState)
@@ -25,6 +33,13 @@ namespace PlatformFighter.Player
         private void Update()
         {
             DoInput();
+            
+            _stateMachine.CurrentState.ProcessState();
+        }
+
+        private void FixedUpdate()
+        {
+            _stateMachine.CurrentState.ProcessStateFixed();
         }
 
         private void DoInput()
