@@ -1,11 +1,10 @@
 using MHR.StateMachine;
-using UnityEngine;
 
 namespace PlatformFighter.Player
 {
     public abstract class PlayerState : State
     {
-        public PlayerPlatform PlayerPlatform => _playerPlatform;
+        protected PlayerPlatform PlayerPlatform => _playerPlatform;
 
         private PlayerPlatform _playerPlatform;
 

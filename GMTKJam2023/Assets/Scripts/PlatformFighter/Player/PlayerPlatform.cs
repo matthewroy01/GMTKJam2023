@@ -1,4 +1,3 @@
-using System;
 using MHR.StateMachine;
 using PlatformFighter.Input;
 using UnityEngine;
