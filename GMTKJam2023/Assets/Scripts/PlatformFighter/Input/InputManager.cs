@@ -23,7 +23,6 @@ namespace PlatformFighter.Input
         public void OnMovement(InputAction.CallbackContext context)
         {
             _inputDirection = context.ReadValue<Vector2>();
-            Debug.Log(_inputDirection);
         }
     }
 }
