@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba20454c8d48f104994709e19e73d771, type: 3}
+  m_Name: Test Audio Data
+  m_EditorClassIdentifier: 
+  _managedAudio:
+  - _name: Overworld Theme
+    _clip: {fileID: 8300000, guid: 4e403b7f79c880841a6bf81c4d6dce84, type: 3}
+    _volume: 0.5
+    _minPitch: 1
+    _maxPitch: 1
+    _letFinishIfLooping: 0
+  - _name: Battle Theme
+    _clip: {fileID: 8300000, guid: f6c1d67094b90bb45bc426936e419489, type: 3}
+    _volume: 0.5
+    _minPitch: 1
+    _maxPitch: 1
+    _letFinishIfLooping: 0
