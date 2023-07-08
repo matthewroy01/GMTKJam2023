@@ -10,10 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db768f9d6f4f45f47a6ac216380e966d, type: 3}
-  m_Name: CharacterDefinition_Test
+  m_Name: CharacterDefinition_JimmyJam
   m_EditorClassIdentifier: 
-  _movementSpeed: 30
-  _jumpForce: 2000
-  _numJumps: 1
-  _weightModifier: 1
+  _name: Jimmy Jam
+  _portrait: {fileID: 21300000, guid: 8ecfb888f2d897646a9f64af5a54542f, type: 3}
+  _portraitTint: {r: 1, g: 0.3537736, b: 0.3537736, a: 1}
+  _movementSpeed: 25
+  _jumpForce: 1500
+  _numJumps: 3
+  _weightModifier: 20
   _airSpeedMultiplier: 1

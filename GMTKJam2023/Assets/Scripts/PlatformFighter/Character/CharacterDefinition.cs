@@ -6,12 +6,18 @@ namespace PlatformFighter.Character
     [CreateAssetMenu(fileName = "New Character Definition", menuName = "ScriptableObjects/Character Definition", order = 1)]
     public class CharacterDefinition : ScriptableObject
     {
+        public string Name => _name;
+        public Sprite Portrait => _portrait;
+        public Color PortraitTint => _portraitTint;
         public float MovementSpeed => _movementSpeed;
         public float JumpForce => _jumpForce;
         public int NumJumps => _numJumps;
         public float WeightModifier => _weightModifier;
         public float AirSpeedMultiplier => _airSpeedMultiplier;
-        
+
+        [SerializeField] private string _name;
+        [SerializeField] private Sprite _portrait;
+        [SerializeField] private Color _portraitTint;
         [SerializeField] private float _movementSpeed;
         [SerializeField] private float _jumpForce;
         [SerializeField, Range(1, 10)] private int _numJumps;

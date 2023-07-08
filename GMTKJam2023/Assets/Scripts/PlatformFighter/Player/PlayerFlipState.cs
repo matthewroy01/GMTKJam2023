@@ -12,6 +12,7 @@ namespace PlatformFighter.Player
         [SerializeField] private float _flipDuration;
         [SerializeField] private Animator _animator;
         [SerializeField] private List<TrailRenderer> _trailRenderers = new();
+        [SerializeField] private Collider2D _attackCollider;
 
         private Vector2 _dashDirection;
         private float _timer;
@@ -23,12 +24,14 @@ namespace PlatformFighter.Player
             
             _animator.SetTrigger(PlayerPlatform.MovementDirection.x >= 0.0f ? "Flip" : "FlipBack");
 
+            _attackCollider.enabled = true;
+
             ToggleTrailRenderers(true);
         }
 
         public override void ExitState()
         {
-            
+            _attackCollider.enabled = false;
         }
 
         public override void ProcessState()
