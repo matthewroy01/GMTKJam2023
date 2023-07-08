@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using MHR.StateMachine;
 using PlatformFighter.Input;
+using PlatformFighter.UI;
 using UnityEngine;
 
 namespace PlatformFighter.Player
@@ -17,12 +20,18 @@ namespace PlatformFighter.Player
         [SerializeField] private PlayerDefaultState _defaultState;
         [SerializeField] private PlayerFlipState _flipState;
         [SerializeField] private PlayerDefendState _defendState;
+        [Header("Health")]
+        [SerializeField] private int _maxHealth;
+        [SerializeField] private List<PlayerHeart> _hearts = new();
 
         private Vector2 _movementDirection;
         private StateMachine _stateMachine;
+        private int _currentHealth;
 
         private void Awake()
         {
+            _currentHealth = _maxHealth;
+            
             _immobileState.SetPlayerPlatform(this);
             _defaultState.SetPlayerPlatform(this);
             _flipState.SetPlayerPlatform(this);
@@ -41,6 +50,9 @@ namespace PlatformFighter.Player
             InputManager.Instance.Ability1Pressed += OnAbility1Pressed;
             InputManager.Instance.Ability2Pressed += OnAbility2Pressed;
             _flipState.DoneFlipping += OnDoneFlipping;
+            _defendState.DoneDefending += OnDoneDefending;
+
+            Character.Character.LandedOnPlayerPlatform += Character_OnLandedOnPlayerPlatform;
         }
 
         private void OnDisable()
@@ -48,6 +60,9 @@ namespace PlatformFighter.Player
             InputManager.Instance.Ability1Pressed -= OnAbility1Pressed;
             InputManager.Instance.Ability2Pressed -= OnAbility2Pressed;
             _flipState.DoneFlipping -= OnDoneFlipping;
+            _defendState.DoneDefending -= OnDoneDefending;
+            
+            Character.Character.LandedOnPlayerPlatform -= Character_OnLandedOnPlayerPlatform;
         }
 
         private void OnAbility1Pressed()
@@ -60,14 +75,19 @@ namespace PlatformFighter.Player
             _stateMachine.TryChangeState(_defendState);
         }
 
-        private void OnDoneDashing()
+        private void OnDoneFlipping()
         {
             ReturnToDefaultState();
         }
 
-        private void OnDoneFlipping()
+        private void OnDoneDefending()
         {
             ReturnToDefaultState();
+        }
+
+        private void Character_OnLandedOnPlayerPlatform()
+        {
+            TakeDamage();
         }
         
         private void Update()
@@ -95,6 +115,13 @@ namespace PlatformFighter.Player
         private void ReturnToDefaultState()
         {
             _stateMachine.TryChangeState(_defaultState);
+        }
+
+        private void TakeDamage()
+        {
+            _hearts[_currentHealth - 1].Lose();
+            
+            _currentHealth--;
         }
     }
 }

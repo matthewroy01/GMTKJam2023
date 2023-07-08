@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using UnityEngine;
 
 namespace PlatformFighter.Character
@@ -18,7 +19,8 @@ namespace PlatformFighter.Character
         {
             _initialTimer = 0.0f;
             _timer = 0.0f;
-            
+
+            Character.Rigidbody2D.velocity = new Vector2(Character.Rigidbody2D.velocity.x, 0.0f);
             Character.Rigidbody2D.AddForce(Vector2.up * Character.Definition.JumpForce);
         }
 
