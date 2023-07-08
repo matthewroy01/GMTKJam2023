@@ -6,9 +6,9 @@ namespace PlatformFighter.Character
     public class CharacterDefaultState : CharacterState
     {
         public event Action DecidedToJump;
-        
+
         [SerializeField] private Transform _debugSphere;
-        
+
         private const float RANDOM_CHECK_SECONDS = 0.2f;
         private const float DELAY_AFTER_DECISION = 1.05f;
         private float _timer;

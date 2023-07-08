@@ -12,6 +12,7 @@ namespace PlatformFighter.Management
     {
         [SerializeField] private PlayerPlatform _playerPlatform;
         [SerializeField] private List<Character.Character> _characters = new();
+        [SerializeField] private ParticleSystem _koParts;
         [Header("Start of Match Countdown")]
         [SerializeField] private float _initialDelay;
         [SerializeField] private float _timeBetweenNumbers;
@@ -46,8 +47,12 @@ namespace PlatformFighter.Management
             Character.Character.Died -= Character_OnDied;
         }
 
-        private void Character_OnDied(bool increaseScore)
+        private void Character_OnDied(bool increaseScore, Vector2 position)
         {
+            GameObject tmp = Instantiate(_koParts, position, Quaternion.identity).gameObject;
+
+            tmp.transform.up = Vector2.zero - position;
+            
             if (!increaseScore)
                 return;
             

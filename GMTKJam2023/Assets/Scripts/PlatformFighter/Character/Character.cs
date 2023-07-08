@@ -9,7 +9,7 @@ namespace PlatformFighter.Character
     public class Character : MonoBehaviour
     {
         public static event Action LandedOnPlayerPlatform;
-        public static event Action<bool> Died;
+        public static event Action<bool, Vector2> Died;
         
         public CharacterDefinition Definition => _definition;
         public Rigidbody2D Rigidbody2D => _rigidbody2D;
@@ -19,6 +19,7 @@ namespace PlatformFighter.Character
         [SerializeField] private CharacterDefinition _definition;
         [SerializeField] private Rigidbody2D _rigidbody2D;
         [SerializeField] private CharacterDisplay _characterDisplay;
+        [SerializeField] private float _recoveryThreshold;
         [Header("Layer Masks")]
         [SerializeField] private LayerMask _groundLayerMask;
         [SerializeField] private LayerMask _playerPlatformLayerMask;
@@ -30,6 +31,7 @@ namespace PlatformFighter.Character
         [SerializeField] private CharacterDefaultState _defaultState;
         [SerializeField] private CharacterJumpState _jumpState;
         [SerializeField] private CharacterStunState _stunState;
+        [SerializeField] private CharacterRecoveryState _recoveryState;
         
         private StateMachine _stateMachine;
         private bool _colliding;
@@ -45,6 +47,7 @@ namespace PlatformFighter.Character
             _defaultState.SetCharacter(this);
             _jumpState.SetCharacter(this);
             _stunState.SetCharacter(this);
+            _recoveryState.SetCharacter(this);
             
             _stateMachine = new StateMachine(_immobileState,
                 new Connection(_immobileState, _defaultState),
@@ -53,7 +56,11 @@ namespace PlatformFighter.Character
                 new Connection(_jumpState, _jumpState),
                 new Connection(_defaultState, _stunState),
                 new Connection(_jumpState, _stunState),
-                new Connection(_stunState, _defaultState)
+                new Connection(_recoveryState, _stunState),
+                new Connection(_stunState, _defaultState),
+                new Connection(_defaultState, _recoveryState),
+                new Connection(_jumpState, _recoveryState),
+                new Connection(_recoveryState, _defaultState)
             );
         }
 
@@ -62,6 +69,7 @@ namespace PlatformFighter.Character
             _defaultState.DecidedToJump += OnDecidedToJump;
             _jumpState.DoneJumping += OnDoneJumping;
             _stunState.DoneBeingStunned += OnDoneBeingStunned;
+            _recoveryState.DoneRecovering += OnDoneRecovering;
         }
 
         private void OnDisable()
@@ -69,6 +77,7 @@ namespace PlatformFighter.Character
             _defaultState.DecidedToJump += OnDecidedToJump;
             _jumpState.DoneJumping -= OnDoneJumping;
             _stunState.DoneBeingStunned -= OnDoneBeingStunned;
+            _recoveryState.DoneRecovering -= OnDoneRecovering;
         }
 
         private void OnDecidedToJump()
@@ -86,10 +95,16 @@ namespace PlatformFighter.Character
             _stateMachine.TryChangeState(_defaultState);
         }
 
+        private void OnDoneRecovering()
+        {
+            _stateMachine.TryChangeState(_defaultState);
+        }
+
         private void Update()
         {
             _stateMachine.CurrentState.ProcessState();
 
+            TryRecovering();
             LookForDamage();
         }
 
@@ -165,15 +180,26 @@ namespace PlatformFighter.Character
         {
             if (other.CompareTag("DeathPlane"))
             {
+                Died?.Invoke(_lastDamageWasFromPlayer, transform.position);
+
                 _rigidbody2D.velocity = Vector2.zero;
                 _damagePercentage = 0.0f;
                 transform.position = Vector2.zero + (Vector2.up * 5);
                 
                 _characterDisplay.UpdateDamageSlider(_damagePercentage);
                 
-                Died?.Invoke(_lastDamageWasFromPlayer);
-
                 _lastDamageWasFromPlayer = false;
+            }
+        }
+
+        private void TryRecovering()
+        {
+            if (_stateMachine.CurrentState == _recoveryState || _stateMachine.CurrentState == _stunState)
+                return;
+            
+            if (transform.position.y < _recoveryThreshold)
+            {
+                _stateMachine.TryChangeState(_recoveryState);
             }
         }
     }
