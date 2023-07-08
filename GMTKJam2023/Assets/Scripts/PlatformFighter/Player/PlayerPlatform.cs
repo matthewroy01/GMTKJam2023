@@ -15,8 +15,8 @@ namespace PlatformFighter.Player
         [Header("States")]
         [SerializeField] private PlayerImmobileState _immobileState;
         [SerializeField] private PlayerDefaultState _defaultState;
-        [SerializeField] private PlayerDashState _dashState;
         [SerializeField] private PlayerFlipState _flipState;
+        [SerializeField] private PlayerDefendState _defendState;
 
         private Vector2 _movementDirection;
         private StateMachine _stateMachine;
@@ -25,41 +25,39 @@ namespace PlatformFighter.Player
         {
             _immobileState.SetPlayerPlatform(this);
             _defaultState.SetPlayerPlatform(this);
-            _dashState.SetPlayerPlatform(this);
             _flipState.SetPlayerPlatform(this);
+            _defendState.SetPlayerPlatform(this);
             
             _stateMachine = new StateMachine(_immobileState,
                 new Connection(_defaultState),
                 new Connection(_defaultState, _immobileState),
-                new Connection(_defaultState, _dashState),
-                new Connection(_defaultState, _flipState)
+                new Connection(_defaultState, _flipState),
+                new Connection(_defaultState, _defendState)
                 );
         }
         
         private void OnEnable()
         {
-            InputManager.Instance.DashPressed += OnDashPressed;
             InputManager.Instance.Ability1Pressed += OnAbility1Pressed;
-            _dashState.DoneDashing += OnDoneDashing;
+            InputManager.Instance.Ability2Pressed += OnAbility2Pressed;
             _flipState.DoneFlipping += OnDoneFlipping;
         }
 
         private void OnDisable()
         {
-            InputManager.Instance.DashPressed -= OnDashPressed;
             InputManager.Instance.Ability1Pressed -= OnAbility1Pressed;
-            _dashState.DoneDashing -= OnDoneDashing;
+            InputManager.Instance.Ability2Pressed -= OnAbility2Pressed;
             _flipState.DoneFlipping -= OnDoneFlipping;
-        }
-
-        private void OnDashPressed()
-        {
-            _stateMachine.TryChangeState(_dashState);
         }
 
         private void OnAbility1Pressed()
         {
             _stateMachine.TryChangeState(_flipState);
+        }
+
+        private void OnAbility2Pressed()
+        {
+            _stateMachine.TryChangeState(_defendState);
         }
 
         private void OnDoneDashing()

@@ -8,14 +8,17 @@ namespace PlatformFighter.Player
     {
         public event Action DoneFlipping;
 
+        [SerializeField] private float _dashSpeed;
         [SerializeField] private float _flipDuration;
         [SerializeField] private Animator _animator;
         [SerializeField] private List<TrailRenderer> _trailRenderers = new();
 
+        private Vector2 _dashDirection;
         private float _timer;
         
         public override void EnterState()
         {
+            _dashDirection = PlayerPlatform.MovementDirection;
             _timer = 0.0f;
             
             _animator.SetTrigger(PlayerPlatform.MovementDirection.x >= 0.0f ? "Flip" : "FlipBack");
@@ -43,7 +46,7 @@ namespace PlatformFighter.Player
 
         public override void ProcessStateFixed()
         {
-            
+            PlayerPlatform.Rigidbody2D.velocity = _dashDirection * _dashSpeed;
         }
 
         private void ToggleTrailRenderers(bool toggle)

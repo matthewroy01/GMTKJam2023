@@ -1502,8 +1502,8 @@ GameObject:
   - component: {fileID: 1258331409}
   - component: {fileID: 1258331408}
   - component: {fileID: 1258331407}
-  - component: {fileID: 1258331410}
   - component: {fileID: 1258331411}
+  - component: {fileID: 1258331412}
   - component: {fileID: 1258331406}
   m_Layer: 0
   m_Name: PlayerPlatform
@@ -1562,7 +1562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed168ceb763ec2742ad43f29d0021879, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 40
+  _movementSpeed: 30
 --- !u!114 &1258331408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1591,22 +1591,8 @@ MonoBehaviour:
   _artContainer: {fileID: 2008579433}
   _immobileState: {fileID: 1258331408}
   _defaultState: {fileID: 1258331407}
-  _dashState: {fileID: 1258331410}
   _flipState: {fileID: 1258331411}
---- !u!114 &1258331410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1258331404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23fd1e801fbdf5640a92ba136bb209b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dashSpeed: 30
-  _dashDuration: 0.1
+  _defendState: {fileID: 1258331412}
 --- !u!114 &1258331411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1619,11 +1605,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ef356f102e04fdf9c84704da929a5cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dashSpeed: 15
   _flipDuration: 0.25
   _animator: {fileID: 2008579434}
   _trailRenderers:
   - {fileID: 994059291}
   - {fileID: 1810936337}
+--- !u!114 &1258331412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258331404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f077ee5d247814a8b292a7db7b356e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defendDuration: 0.5
 --- !u!1 &1419552887
 GameObject:
   m_ObjectHideFlags: 0
