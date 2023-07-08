@@ -1,3 +1,5 @@
+using System;
+using PlatformFighter.Input;
 using UnityEngine;
 
 namespace PlatformFighter.Player
@@ -5,7 +7,7 @@ namespace PlatformFighter.Player
     public class PlayerDefaultState : PlayerState
     {
         [SerializeField] private float _movementSpeed;
-        
+
         public override void EnterState()
         {
             
@@ -28,7 +30,7 @@ namespace PlatformFighter.Player
 
         private void Movement()
         {
-            PlayerPlatform.Rigidbody2D.velocity = PlayerPlatform.MovementDirection * _movementSpeed;
+            PlayerPlatform.Rigidbody2D.AddForce(PlayerPlatform.MovementDirection * _movementSpeed);
         }
     }
 }

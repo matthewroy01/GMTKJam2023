@@ -37,6 +37,42 @@ namespace PlatformFighter.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Dash"",
+                    ""type"": ""Button"",
+                    ""id"": ""30fc0fe5-8645-4395-87c5-88d708dcac84"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ability1"",
+                    ""type"": ""Button"",
+                    ""id"": ""ec8e439d-bc32-40e2-a279-3b770a46ed4d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ability2"",
+                    ""type"": ""Button"",
+                    ""id"": ""f0d8ccf3-7c53-4f76-b6e7-eb7fdd923d7c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ability3"",
+                    ""type"": ""Button"",
+                    ""id"": ""bcaedfe6-1570-4144-9c45-73690ab41510"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -94,6 +130,105 @@ namespace PlatformFighter.Input
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""ArrowKeys"",
+                    ""id"": ""360189c6-0d31-4251-acf4-85d5c3a5e64e"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""65888148-1591-406a-b8a4-557eb8f59f78"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""09a6bc06-78e3-47a5-90a4-104679dcc7eb"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""c99384a1-ad2d-4802-993e-400c3e0f2a8c"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""fb473e65-5e1b-42ac-b517-988224a50d8a"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""137516d1-c6bb-478e-b6de-4630ef58908a"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""51a5a88a-5411-46e7-9c42-0436dcabb44e"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f32c380-726e-4196-9504-967dd71618a5"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eba201e3-2247-454d-9f83-f37c0c7731d1"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -103,6 +238,10 @@ namespace PlatformFighter.Input
             // Fighting
             m_Fighting = asset.FindActionMap("Fighting", throwIfNotFound: true);
             m_Fighting_Movement = m_Fighting.FindAction("Movement", throwIfNotFound: true);
+            m_Fighting_Dash = m_Fighting.FindAction("Dash", throwIfNotFound: true);
+            m_Fighting_Ability1 = m_Fighting.FindAction("Ability1", throwIfNotFound: true);
+            m_Fighting_Ability2 = m_Fighting.FindAction("Ability2", throwIfNotFound: true);
+            m_Fighting_Ability3 = m_Fighting.FindAction("Ability3", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -163,11 +302,19 @@ namespace PlatformFighter.Input
         private readonly InputActionMap m_Fighting;
         private IFightingActions m_FightingActionsCallbackInterface;
         private readonly InputAction m_Fighting_Movement;
+        private readonly InputAction m_Fighting_Dash;
+        private readonly InputAction m_Fighting_Ability1;
+        private readonly InputAction m_Fighting_Ability2;
+        private readonly InputAction m_Fighting_Ability3;
         public struct FightingActions
         {
             private @PlatformFighterControls m_Wrapper;
             public FightingActions(@PlatformFighterControls wrapper) { m_Wrapper = wrapper; }
             public InputAction @Movement => m_Wrapper.m_Fighting_Movement;
+            public InputAction @Dash => m_Wrapper.m_Fighting_Dash;
+            public InputAction @Ability1 => m_Wrapper.m_Fighting_Ability1;
+            public InputAction @Ability2 => m_Wrapper.m_Fighting_Ability2;
+            public InputAction @Ability3 => m_Wrapper.m_Fighting_Ability3;
             public InputActionMap Get() { return m_Wrapper.m_Fighting; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -180,6 +327,18 @@ namespace PlatformFighter.Input
                     @Movement.started -= m_Wrapper.m_FightingActionsCallbackInterface.OnMovement;
                     @Movement.performed -= m_Wrapper.m_FightingActionsCallbackInterface.OnMovement;
                     @Movement.canceled -= m_Wrapper.m_FightingActionsCallbackInterface.OnMovement;
+                    @Dash.started -= m_Wrapper.m_FightingActionsCallbackInterface.OnDash;
+                    @Dash.performed -= m_Wrapper.m_FightingActionsCallbackInterface.OnDash;
+                    @Dash.canceled -= m_Wrapper.m_FightingActionsCallbackInterface.OnDash;
+                    @Ability1.started -= m_Wrapper.m_FightingActionsCallbackInterface.OnAbility1;
+                    @Ability1.performed -= m_Wrapper.m_FightingActionsCallbackInterface.OnAbility1;
+                    @Ability1.canceled -= m_Wrapper.m_FightingActionsCallbackInterface.OnAbility1;
+                    @Ability2.started -= m_Wrapper.m_FightingActionsCallbackInterface.OnAbility2;
+                    @Ability2.performed -= m_Wrapper.m_FightingActionsCallbackInterface.OnAbility2;
+                    @Ability2.canceled -= m_Wrapper.m_FightingActionsCallbackInterface.OnAbility2;
+                    @Ability3.started -= m_Wrapper.m_FightingActionsCallbackInterface.OnAbility3;
+                    @Ability3.performed -= m_Wrapper.m_FightingActionsCallbackInterface.OnAbility3;
+                    @Ability3.canceled -= m_Wrapper.m_FightingActionsCallbackInterface.OnAbility3;
                 }
                 m_Wrapper.m_FightingActionsCallbackInterface = instance;
                 if (instance != null)
@@ -187,6 +346,18 @@ namespace PlatformFighter.Input
                     @Movement.started += instance.OnMovement;
                     @Movement.performed += instance.OnMovement;
                     @Movement.canceled += instance.OnMovement;
+                    @Dash.started += instance.OnDash;
+                    @Dash.performed += instance.OnDash;
+                    @Dash.canceled += instance.OnDash;
+                    @Ability1.started += instance.OnAbility1;
+                    @Ability1.performed += instance.OnAbility1;
+                    @Ability1.canceled += instance.OnAbility1;
+                    @Ability2.started += instance.OnAbility2;
+                    @Ability2.performed += instance.OnAbility2;
+                    @Ability2.canceled += instance.OnAbility2;
+                    @Ability3.started += instance.OnAbility3;
+                    @Ability3.performed += instance.OnAbility3;
+                    @Ability3.canceled += instance.OnAbility3;
                 }
             }
         }
@@ -194,6 +365,10 @@ namespace PlatformFighter.Input
         public interface IFightingActions
         {
             void OnMovement(InputAction.CallbackContext context);
+            void OnDash(InputAction.CallbackContext context);
+            void OnAbility1(InputAction.CallbackContext context);
+            void OnAbility2(InputAction.CallbackContext context);
+            void OnAbility3(InputAction.CallbackContext context);
         }
     }
 }
