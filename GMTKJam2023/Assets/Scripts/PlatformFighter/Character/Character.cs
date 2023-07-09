@@ -20,6 +20,7 @@ namespace PlatformFighter.Character
         [SerializeField] private Rigidbody2D _rigidbody2D;
         [SerializeField] private CharacterDisplay _characterDisplay;
         [SerializeField] private float _recoveryThreshold;
+        [SerializeField] private ParticleSystem _hitParts;
         [Header("Layer Masks")]
         [SerializeField] private LayerMask _groundLayerMask;
         [SerializeField] private LayerMask _playerPlatformLayerMask;
@@ -38,6 +39,7 @@ namespace PlatformFighter.Character
         private bool _collidingWithDamage;
         private float _damagePercentage = 0.0f;
         private bool _lastDamageWasFromPlayer = false;
+        private Vector2 _defaultPosition;
 
         private void Awake()
         {
@@ -50,6 +52,7 @@ namespace PlatformFighter.Character
             _recoveryState.SetCharacter(this);
             
             _stateMachine = new StateMachine(_immobileState,
+                new Connection(_immobileState),
                 new Connection(_immobileState, _defaultState),
                 new Connection(_defaultState, _jumpState),
                 new Connection(_jumpState, _defaultState),
@@ -63,6 +66,8 @@ namespace PlatformFighter.Character
                 new Connection(_recoveryState, _defaultState),
                 new Connection(_stunState, _stunState)
             );
+
+            _defaultPosition = transform.position;
         }
 
         private void OnEnable()
@@ -154,8 +159,9 @@ namespace PlatformFighter.Character
 
                     _stateMachine.TryChangeState(_stunState);
                     
-                    Vector2 playerPosition = FindObjectOfType<PlayerPlatform>().transform.position;
-                    TakeDamage(25.0f, tmp.ClosestPoint(transform.position));
+                    Vector2 closestPoint = tmp.ClosestPoint(transform.position);
+                    Instantiate(_hitParts, closestPoint, Quaternion.identity);
+                    TakeDamage(25.0f, closestPoint);
                 }
 
                 _collidingWithDamage = true;
@@ -205,6 +211,13 @@ namespace PlatformFighter.Character
             {
                 _stateMachine.TryChangeState(_recoveryState);
             }
+        }
+
+        public void ResetPosition()
+        {
+            _stateMachine.TryChangeState(_immobileState);
+            Rigidbody2D.velocity = Vector2.zero;
+            transform.position = _defaultPosition;
         }
     }
 }

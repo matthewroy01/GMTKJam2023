@@ -10,6 +10,7 @@ namespace PlatformFighter.Player
 {
     public class PlayerPlatform : MonoBehaviour
     {
+        public static event Action<float> HealthUpdated;
         public Rigidbody2D Rigidbody2D => _rigidbody2D;
         public Vector2 MovementDirection => _movementDirection;
         public Transform ArtContainer => _artContainer;
@@ -34,6 +35,7 @@ namespace PlatformFighter.Player
         private StateMachine _stateMachine;
         private int _currentHealth;
         private const float ENERGY_MAX = 100.0f;
+        private Vector2 _defaultPosition;
 
         private void Awake()
         {
@@ -46,11 +48,14 @@ namespace PlatformFighter.Player
             _defendState.SetPlayerPlatform(this);
             
             _stateMachine = new StateMachine(_immobileState,
+                new Connection(_immobileState),
                 new Connection(_defaultState),
                 new Connection(_defaultState, _immobileState),
                 new Connection(_defaultState, _flipState),
                 new Connection(_defaultState, _defendState)
                 );
+
+            _defaultPosition = transform.position;
         }
         
         private void OnEnable()
@@ -136,6 +141,8 @@ namespace PlatformFighter.Player
             _hearts[_currentHealth - 1].Lose();
             
             _currentHealth--;
+            
+            HealthUpdated?.Invoke(_currentHealth);
         }
 
         public void DrainEnergy()
@@ -166,6 +173,19 @@ namespace PlatformFighter.Player
         private void UpdateEnergySlider()
         {
             _slider.value = CurrentEnergy / ENERGY_MAX;
+        }
+        
+        public void ResetPosition()
+        {
+            transform.position = _defaultPosition;
+            _currentHealth = _maxHealth;
+            
+            _hearts.ForEach(heart => heart.Restore());
+        }
+
+        public void ChangeToImmobileState()
+        {
+            _stateMachine.TryChangeState(_immobileState);
         }
     }
 }
