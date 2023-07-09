@@ -73,6 +73,15 @@ namespace PlatformFighter.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MovementHorizontal"",
+                    ""type"": ""Value"",
+                    ""id"": ""2d21e9bb-313f-461b-816d-9e55f0f8c783"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -210,6 +219,17 @@ namespace PlatformFighter.Input
                 },
                 {
                     ""name"": """",
+                    ""id"": ""e8584add-7438-495d-bff7-dff0bed928f8"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""7f32c380-726e-4196-9504-967dd71618a5"",
                     ""path"": ""<Keyboard>/x"",
                     ""interactions"": """",
@@ -229,6 +249,72 @@ namespace PlatformFighter.Input
                     ""action"": ""Ability3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""AD"",
+                    ""id"": ""0cb01464-0432-4897-a665-ed80e7fb07ff"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MovementHorizontal"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""b3b00c98-5bb9-441d-bcb1-aae56623bae3"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MovementHorizontal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""23882b29-d563-4e4f-872a-650cbda752a7"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MovementHorizontal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""ArrowKeys"",
+                    ""id"": ""22ee0843-0b57-43e1-9f19-a538c55c27b9"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MovementHorizontal"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""38b0014a-0f07-4870-b602-bc6bbc1640e4"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MovementHorizontal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""95d61d13-2f16-43aa-b144-83538bf6e03a"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MovementHorizontal"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -242,6 +328,7 @@ namespace PlatformFighter.Input
             m_Fighting_Ability1 = m_Fighting.FindAction("Ability1", throwIfNotFound: true);
             m_Fighting_Ability2 = m_Fighting.FindAction("Ability2", throwIfNotFound: true);
             m_Fighting_Ability3 = m_Fighting.FindAction("Ability3", throwIfNotFound: true);
+            m_Fighting_MovementHorizontal = m_Fighting.FindAction("MovementHorizontal", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -306,6 +393,7 @@ namespace PlatformFighter.Input
         private readonly InputAction m_Fighting_Ability1;
         private readonly InputAction m_Fighting_Ability2;
         private readonly InputAction m_Fighting_Ability3;
+        private readonly InputAction m_Fighting_MovementHorizontal;
         public struct FightingActions
         {
             private @PlatformFighterControls m_Wrapper;
@@ -315,6 +403,7 @@ namespace PlatformFighter.Input
             public InputAction @Ability1 => m_Wrapper.m_Fighting_Ability1;
             public InputAction @Ability2 => m_Wrapper.m_Fighting_Ability2;
             public InputAction @Ability3 => m_Wrapper.m_Fighting_Ability3;
+            public InputAction @MovementHorizontal => m_Wrapper.m_Fighting_MovementHorizontal;
             public InputActionMap Get() { return m_Wrapper.m_Fighting; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -339,6 +428,9 @@ namespace PlatformFighter.Input
                     @Ability3.started -= m_Wrapper.m_FightingActionsCallbackInterface.OnAbility3;
                     @Ability3.performed -= m_Wrapper.m_FightingActionsCallbackInterface.OnAbility3;
                     @Ability3.canceled -= m_Wrapper.m_FightingActionsCallbackInterface.OnAbility3;
+                    @MovementHorizontal.started -= m_Wrapper.m_FightingActionsCallbackInterface.OnMovementHorizontal;
+                    @MovementHorizontal.performed -= m_Wrapper.m_FightingActionsCallbackInterface.OnMovementHorizontal;
+                    @MovementHorizontal.canceled -= m_Wrapper.m_FightingActionsCallbackInterface.OnMovementHorizontal;
                 }
                 m_Wrapper.m_FightingActionsCallbackInterface = instance;
                 if (instance != null)
@@ -358,6 +450,9 @@ namespace PlatformFighter.Input
                     @Ability3.started += instance.OnAbility3;
                     @Ability3.performed += instance.OnAbility3;
                     @Ability3.canceled += instance.OnAbility3;
+                    @MovementHorizontal.started += instance.OnMovementHorizontal;
+                    @MovementHorizontal.performed += instance.OnMovementHorizontal;
+                    @MovementHorizontal.canceled += instance.OnMovementHorizontal;
                 }
             }
         }
@@ -369,6 +464,7 @@ namespace PlatformFighter.Input
             void OnAbility1(InputAction.CallbackContext context);
             void OnAbility2(InputAction.CallbackContext context);
             void OnAbility3(InputAction.CallbackContext context);
+            void OnMovementHorizontal(InputAction.CallbackContext context);
         }
     }
 }

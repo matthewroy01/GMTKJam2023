@@ -18,5 +18,5 @@ MonoBehaviour:
   _movementSpeed: 25
   _jumpForce: 1500
   _numJumps: 3
-  _weightModifier: 20
+  _weightModifier: 30
   _airSpeedMultiplier: 1

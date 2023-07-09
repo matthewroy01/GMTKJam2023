@@ -9808,6 +9808,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _baseStunDuration: 0.5
+  _defaultPhysicsMaterial2D: {fileID: 6200000, guid: 768fe0d9df7001c4094d50f85a8740e2, type: 2}
+  _bouncyPhysicsMaterial2D: {fileID: 6200000, guid: a6504f6fcb710644ea0293117aafc520, type: 2}
 --- !u!114 &9198259671122442682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9821,7 +9823,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startup: 0.5
-  _duration: 0.5
+  _duration: 0.4
   _horizontalRecoveryAmount: 7.5
   _verticalRecoveryAmount: 20
   _fireParts: {fileID: 516780450296642967}

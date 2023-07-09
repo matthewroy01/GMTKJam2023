@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using DG.Tweening;
+using PlatformFighter.Input;
 using UnityEngine;
 
 namespace PlatformFighter.Player
@@ -8,13 +9,45 @@ namespace PlatformFighter.Player
     {
         public event Action DoneDefending;
 
-        [SerializeField] private float _defendDuration;
+        [SerializeField] private float _movementSpeed;
+        [SerializeField] private Transform _spikeTop;
+        [SerializeField] private Transform _spikeBottom;
+        [SerializeField] private float _outTime;
+        [SerializeField] private float _inTime;
+        [SerializeField] private Collider2D _collider;
 
         private float _timer;
-        
+        private Tween _spikeTopTween;
+        private Tween _spikeBottomTween;
+        private bool _buttonReleased;
+
+        private void OnEnable()
+        {
+            InputManager.Instance.Ability1Released += OnAbility1Released;
+        }
+
+        private void OnDisable()
+        {
+            InputManager.Instance.Ability1Released -= OnAbility1Released;
+        }
+
+        private void OnAbility1Released()
+        {
+            _buttonReleased = true;
+        }
+
         public override void EnterState()
         {
-            PlayerPlatform.Rigidbody2D.velocity = Vector2.zero;
+            _buttonReleased = false;
+            
+            _spikeTopTween?.Kill();
+            _spikeBottomTween?.Kill();
+            
+            _spikeTopTween = _spikeTop.DOLocalMoveY(0.3f, _outTime);
+            _spikeBottomTween = _spikeBottom.DOLocalMoveY(-0.3f, _outTime);
+
+            _collider.enabled = true;
+            
             Physics.IgnoreLayerCollision(6, 7, false);
             
             _timer = 0.0f;
@@ -22,23 +55,33 @@ namespace PlatformFighter.Player
 
         public override void ExitState()
         {
+            _spikeTopTween = _spikeTop.DOLocalMoveY(0.0f, _inTime);
+            _spikeBottomTween = _spikeBottom.DOLocalMoveY(-0.0f, _inTime);
+
+            _collider.enabled = false;
+            
             Physics.IgnoreLayerCollision(6, 7, true);
         }
 
         public override void ProcessState()
         {
-            if (_timer < _defendDuration)
+            if (_buttonReleased)
             {
-                _timer += Time.deltaTime;
-                return;
+                DoneDefending?.Invoke();
+                _buttonReleased = false;
             }
-            
-            DoneDefending?.Invoke();
         }
 
         public override void ProcessStateFixed()
         {
-            
+            PlayerPlatform.DrainEnergy();
+            Movement();
+        }
+
+        private void Movement()
+        {
+            PlayerPlatform.Rigidbody2D.velocity =
+                new Vector2(PlayerPlatform.MovementDirection.x * _movementSpeed, 0.0f);
         }
     }
 }

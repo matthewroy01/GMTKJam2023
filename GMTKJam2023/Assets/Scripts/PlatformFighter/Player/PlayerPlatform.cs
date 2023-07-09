@@ -4,6 +4,7 @@ using MHR.StateMachine;
 using PlatformFighter.Input;
 using PlatformFighter.UI;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PlatformFighter.Player
 {
@@ -12,6 +13,7 @@ namespace PlatformFighter.Player
         public Rigidbody2D Rigidbody2D => _rigidbody2D;
         public Vector2 MovementDirection => _movementDirection;
         public Transform ArtContainer => _artContainer;
+        [HideInInspector] public float CurrentEnergy;
         
         [SerializeField] private Rigidbody2D _rigidbody2D;
         [SerializeField] private Transform _artContainer;
@@ -23,14 +25,20 @@ namespace PlatformFighter.Player
         [Header("Health")]
         [SerializeField] private int _maxHealth;
         [SerializeField] private List<PlayerHeart> _hearts = new();
+        [Header("Energy")]
+        [SerializeField] private Slider _slider;
+        [SerializeField] private float _energyDrainPerFrame;
+        [SerializeField] private float _energyRegenerationPerFrame;
 
         private Vector2 _movementDirection;
         private StateMachine _stateMachine;
         private int _currentHealth;
+        private const float ENERGY_MAX = 100.0f;
 
         private void Awake()
         {
             _currentHealth = _maxHealth;
+            CurrentEnergy = ENERGY_MAX;
             
             _immobileState.SetPlayerPlatform(this);
             _defaultState.SetPlayerPlatform(this);
@@ -48,7 +56,6 @@ namespace PlatformFighter.Player
         private void OnEnable()
         {
             InputManager.Instance.Ability1Pressed += OnAbility1Pressed;
-            InputManager.Instance.Ability2Pressed += OnAbility2Pressed;
             _flipState.DoneFlipping += OnDoneFlipping;
             _defendState.DoneDefending += OnDoneDefending;
 
@@ -58,19 +65,18 @@ namespace PlatformFighter.Player
         private void OnDisable()
         {
             InputManager.Instance.Ability1Pressed -= OnAbility1Pressed;
-            InputManager.Instance.Ability2Pressed -= OnAbility2Pressed;
             _flipState.DoneFlipping -= OnDoneFlipping;
             _defendState.DoneDefending -= OnDoneDefending;
             
             Character.Character.LandedOnPlayerPlatform -= Character_OnLandedOnPlayerPlatform;
         }
 
-        private void OnAbility1Pressed()
+        private void OnAbility2Pressed()
         {
             _stateMachine.TryChangeState(_flipState);
         }
 
-        private void OnAbility2Pressed()
+        private void OnAbility1Pressed()
         {
             _stateMachine.TryChangeState(_defendState);
         }
@@ -100,11 +106,16 @@ namespace PlatformFighter.Player
         private void FixedUpdate()
         {
             _stateMachine.CurrentState.ProcessStateFixed();
+
+            if (_stateMachine.CurrentState != _defendState)
+            {
+                RegenerateEnergy();
+            }
         }
 
         private void DoInput()
         {
-            _movementDirection = InputManager.Instance.InputDirection;
+            _movementDirection = new Vector2(InputManager.Instance.InputDirectionHorizontal, 0.0f);
         }
 
         public void UnlockMovement()
@@ -119,9 +130,42 @@ namespace PlatformFighter.Player
 
         private void TakeDamage()
         {
+            if (_stateMachine.CurrentState == _defendState)
+                return;
+            
             _hearts[_currentHealth - 1].Lose();
             
             _currentHealth--;
+        }
+
+        public void DrainEnergy()
+        {
+            if (CurrentEnergy - _energyDrainPerFrame <= 0.0f)
+            {
+                CurrentEnergy = 0.0f;
+                _stateMachine.TryChangeState(_defaultState);
+            }
+            
+            CurrentEnergy -= _energyDrainPerFrame;
+            
+            UpdateEnergySlider();
+        }
+
+        private void RegenerateEnergy()
+        {
+            if (CurrentEnergy + _energyRegenerationPerFrame >= ENERGY_MAX)
+            {
+                CurrentEnergy = ENERGY_MAX;
+            }
+
+            CurrentEnergy += _energyRegenerationPerFrame;
+            
+            UpdateEnergySlider();
+        }
+
+        private void UpdateEnergySlider()
+        {
+            _slider.value = CurrentEnergy / ENERGY_MAX;
         }
     }
 }

@@ -60,7 +60,8 @@ namespace PlatformFighter.Character
                 new Connection(_stunState, _defaultState),
                 new Connection(_defaultState, _recoveryState),
                 new Connection(_jumpState, _recoveryState),
-                new Connection(_recoveryState, _defaultState)
+                new Connection(_recoveryState, _defaultState),
+                new Connection(_stunState, _stunState)
             );
         }
 
@@ -154,7 +155,7 @@ namespace PlatformFighter.Character
                     _stateMachine.TryChangeState(_stunState);
                     
                     Vector2 playerPosition = FindObjectOfType<PlayerPlatform>().transform.position;
-                    TakeDamage(25.0f, new Vector2(playerPosition.x, transform.position.y));
+                    TakeDamage(25.0f, tmp.ClosestPoint(transform.position));
                 }
 
                 _collidingWithDamage = true;
@@ -168,10 +169,13 @@ namespace PlatformFighter.Character
         {
             _damagePercentage += damage;
 
+            bool below = transform.position.y < source.y;
+            float downwardsBonus = below ? 2.0f : 1.0f;
+
             Vector2 direction = ((Vector2)transform.position - source).normalized;
             float knockback = (_baseKnockbackForce + _damagePercentage) * _definition.WeightModifier;
             Rigidbody2D.AddForce(direction * knockback);
-            Rigidbody2D.AddForce(Vector2.up * (knockback * 0.75f));
+            Rigidbody2D.AddForce((below ? Vector2.down : Vector2.up) * (knockback * 0.75f * downwardsBonus));
             
             _characterDisplay.UpdateDamageSlider(_damagePercentage);
         }

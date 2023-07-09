@@ -30,7 +30,9 @@ namespace PlatformFighter.Player
 
         private void Movement()
         {
-            PlayerPlatform.Rigidbody2D.AddForce(PlayerPlatform.MovementDirection * _movementSpeed);
+            PlayerPlatform.Rigidbody2D.velocity =
+                new Vector2(PlayerPlatform.MovementDirection.x * _movementSpeed, 0.0f);
+            //PlayerPlatform.Rigidbody2D.AddForce(PlayerPlatform.MovementDirection * _movementSpeed);
         }
     }
 }
