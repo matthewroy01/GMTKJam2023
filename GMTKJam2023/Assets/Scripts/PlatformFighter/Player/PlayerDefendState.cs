@@ -16,7 +16,7 @@ namespace PlatformFighter.Player
         [SerializeField] private float _inTime;
         [SerializeField] private Collider2D _collider;
 
-        private float _timer;
+        //private float _timer;
         private Tween _spikeTopTween;
         private Tween _spikeBottomTween;
         private bool _buttonReleased;
@@ -50,7 +50,7 @@ namespace PlatformFighter.Player
             
             Physics.IgnoreLayerCollision(6, 7, false);
             
-            _timer = 0.0f;
+            //_timer = 0.0f;
         }
 
         public override void ExitState()

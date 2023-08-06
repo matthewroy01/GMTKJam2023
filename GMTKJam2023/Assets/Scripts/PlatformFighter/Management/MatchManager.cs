@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using MHRUtil.Saving;
 using PlatformFighter.Player;
 using TMPro;
 using UnityEngine;
@@ -31,6 +32,8 @@ namespace PlatformFighter.Management
         [SerializeField] private GameObject _newBestTime;
         [SerializeField] private GameObject _newBestScore;
         [SerializeField] private CanvasGroup _buttonsCanvasGroup;
+        [Header("Save")]
+        [SerializeField] private SaveInfo _saveInfo;
 
         private int _score = 0;
         private float _time;
@@ -38,9 +41,14 @@ namespace PlatformFighter.Management
         private Coroutine _countdownRoutine;
         private bool _gameRunning;
         private Coroutine _gameRunningRoutine;
+        private SaveData _saveData;
         
         private void Awake()
         {
+            SimpleSaveSystem.Load(_saveInfo);
+            SaveData saveData = SimpleSaveSystem.TryGetData<SaveData>() ?? new SaveData();
+            _saveData = saveData;
+
             _time = _startingTime;
 
             SetTimerText();
@@ -181,17 +189,32 @@ namespace PlatformFighter.Management
 
         private IEnumerator EndGameRoutine()
         {
+            bool newBestTime = _saveData.BestTime > _time;
+            bool newBestScore = _saveData.BestScore < _score;
+
+            if (newBestTime)
+            {
+                _saveData.BestTime = _time;
+            }
+
+            if (newBestScore)
+            {
+                _saveData.BestScore = _score;
+            }
+            
+            SimpleSaveSystem.SetData(_saveData);
+            SimpleSaveSystem.Save();
+
             _resultsCanvasGroup.blocksRaycasts = _resultsCanvasGroup.interactable = true;
             
             yield return _resultsCanvasGroup.DOFade(1.0f, 1.0f);
-            
+
             TimeSpan t = TimeSpan.FromSeconds(_time);
             _timeRemainingText.text = "Time Remaining: " + t.ToString(@"mm\:ss");
             yield return _timeRemainingText.DOFade(1.0f, 0.5f);
             
-            if (PlayerPrefs.GetFloat("BestTime", _startingTime) > _time)
+            if (newBestTime)
             {
-                PlayerPrefs.SetFloat("BestTime", _time);
                 _newBestTime.SetActive(true);
                 _newBestTime.transform.DOPunchScale(Vector3.one * 0.25f, 0.5f, 0, 0.0f);
             }
@@ -199,9 +222,8 @@ namespace PlatformFighter.Management
             _finalScoreText.text = "Score: " + _score;
             yield return _finalScoreText.DOFade(1.0f, 0.5f);
 
-            if (PlayerPrefs.GetInt("BestScore", -1) < _score)
+            if (newBestScore)
             {
-                PlayerPrefs.SetInt("BestScore", _score);
                 _newBestScore.SetActive(true);
                 _newBestScore.transform.DOPunchScale(Vector3.one * 0.25f, 0.5f, 0, 0.0f);
             }

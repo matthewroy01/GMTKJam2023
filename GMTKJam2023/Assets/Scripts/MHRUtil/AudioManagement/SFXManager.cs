@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MHR.GameObjectManagement;
+#if UNITY_EDITOR
 using UnityEditorInternal;
+#endif
 
 namespace AudioManagement.SFX
 {
@@ -37,7 +37,9 @@ namespace AudioManagement.SFX
             for (int i = 0; i < max; ++i)
             {
                 AudioSource tmp = gameObject.AddComponent<AudioSource>();
+#if UNITY_EDITOR
                 InternalEditorUtility.SetIsInspectorExpanded(tmp, false);
+#endif
                 tmp.loop = looping;
                 
                 if (looping)
