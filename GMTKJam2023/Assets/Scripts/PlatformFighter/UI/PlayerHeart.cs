@@ -16,8 +16,8 @@ namespace PlatformFighter.UI
 
         public void Lose()
         {
-            _overlay.rectTransform.DOScale(Vector3.one * 2.0f, 0.5f);
-            _overlay.rectTransform.DOShakePosition(0.5f, Vector3.right * 50.0f, 100);
+            _overlay.rectTransform.DOScale(Vector3.one * 1.5f, 0.4f);
+            _overlay.rectTransform.DOShakePosition(0.4f, Vector3.right * 40.0f, 75);
             _overlay.DOFade(0.0f, 0.25f).SetDelay(0.25f);
         }
     }
