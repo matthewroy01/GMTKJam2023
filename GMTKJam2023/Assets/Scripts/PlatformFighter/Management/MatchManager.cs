@@ -88,7 +88,7 @@ namespace PlatformFighter.Management
 
         private void PlayerPlatform_OnHealthUpdated(float health)
         {
-            if (health <= 0.0f)
+            if (health <= 0.0f && _gameRunning)
             {
                 EndGame();
             }
