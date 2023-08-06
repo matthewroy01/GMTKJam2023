@@ -138,7 +138,8 @@ namespace PlatformFighter.Player
             if (_stateMachine.CurrentState == _defendState)
                 return;
             
-            _hearts[_currentHealth - 1].Lose();
+            if (_currentHealth > 0)
+                _hearts[_currentHealth - 1].Lose();
             
             _currentHealth--;
             
