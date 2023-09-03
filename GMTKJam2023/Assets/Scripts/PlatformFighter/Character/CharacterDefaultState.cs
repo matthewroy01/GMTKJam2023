@@ -6,6 +6,7 @@ namespace PlatformFighter.Character
     public class CharacterDefaultState : CharacterState
     {
         public event Action DecidedToJump;
+        public event Action DecidedToAttack;
 
         [SerializeField] private Transform _debugSphere;
 
@@ -76,17 +77,17 @@ namespace PlatformFighter.Character
 
         private void MakeDecision()
         {
-            int random = UnityEngine.Random.Range(0, 10);
+            int random = UnityEngine.Random.Range(0, 11);
 
-            if (random < 2)
+            if (random < 3)
             {
-                // TODO: attack
+                DecidedToAttack?.Invoke();
             }
-            else if (random < 5)
+            else if (random < 6)
             {
                 DecidedToJump?.Invoke();
             }
-            else if (random < 8)
+            else if (random < 9)
             {
                 ChangeDirection();
             }

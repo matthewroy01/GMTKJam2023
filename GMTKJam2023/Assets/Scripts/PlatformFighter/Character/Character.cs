@@ -33,6 +33,7 @@ namespace PlatformFighter.Character
         [SerializeField] private CharacterJumpState _jumpState;
         [SerializeField] private CharacterStunState _stunState;
         [SerializeField] private CharacterRecoveryState _recoveryState;
+        [SerializeField] private CharacterAttackState _attackState;
         
         private StateMachine _stateMachine;
         private bool _colliding;
@@ -50,6 +51,7 @@ namespace PlatformFighter.Character
             _jumpState.SetCharacter(this);
             _stunState.SetCharacter(this);
             _recoveryState.SetCharacter(this);
+            _attackState.SetCharacter(this);
             
             _stateMachine = new StateMachine(_immobileState,
                 new Connection(_immobileState),
@@ -64,7 +66,9 @@ namespace PlatformFighter.Character
                 new Connection(_defaultState, _recoveryState),
                 new Connection(_jumpState, _recoveryState),
                 new Connection(_recoveryState, _defaultState),
-                new Connection(_stunState, _stunState)
+                new Connection(_stunState, _stunState),
+                new Connection(_defaultState, _attackState),
+                new Connection(_attackState, _defaultState)
             );
 
             _defaultPosition = transform.position;
@@ -73,22 +77,31 @@ namespace PlatformFighter.Character
         private void OnEnable()
         {
             _defaultState.DecidedToJump += OnDecidedToJump;
+            _defaultState.DecidedToAttack += OnDecidedToAttack;
             _jumpState.DoneJumping += OnDoneJumping;
             _stunState.DoneBeingStunned += OnDoneBeingStunned;
             _recoveryState.DoneRecovering += OnDoneRecovering;
+            _attackState.DoneAttacking += OnDoneAttacking;
         }
 
         private void OnDisable()
         {
-            _defaultState.DecidedToJump += OnDecidedToJump;
+            _defaultState.DecidedToJump -= OnDecidedToJump;
+            _defaultState.DecidedToAttack -= OnDecidedToAttack;
             _jumpState.DoneJumping -= OnDoneJumping;
             _stunState.DoneBeingStunned -= OnDoneBeingStunned;
             _recoveryState.DoneRecovering -= OnDoneRecovering;
+            _attackState.DoneAttacking -= OnDoneAttacking;
         }
 
         private void OnDecidedToJump()
         {
             _stateMachine.TryChangeState(_jumpState);
+        }
+
+        private void OnDecidedToAttack()
+        {
+            _stateMachine.TryChangeState(_attackState);
         }
 
         private void OnDoneJumping()
@@ -102,6 +115,11 @@ namespace PlatformFighter.Character
         }
 
         private void OnDoneRecovering()
+        {
+            _stateMachine.TryChangeState(_defaultState);
+        }
+
+        private void OnDoneAttacking()
         {
             _stateMachine.TryChangeState(_defaultState);
         }
@@ -218,6 +236,11 @@ namespace PlatformFighter.Character
             _stateMachine.TryChangeState(_immobileState);
             Rigidbody2D.velocity = Vector2.zero;
             transform.position = _defaultPosition;
+        }
+
+        public float GetDirectionFacingMultiplier()
+        {
+            return MovementDirection.x >= 0.0f ? 1.0f : -1.0f;
         }
     }
 }

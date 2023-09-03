@@ -20,3 +20,8 @@ MonoBehaviour:
   _numJumps: 3
   _weightModifier: 30
   _airSpeedMultiplier: 1
+  _attackDamage: 1
+  _attackWindupDuration: 0.5
+  _attackActiveDuration: 0.25
+  _attackCooldownDuration: 0.25
+  _attackHitboxOffset: {x: 1.6666, y: 0.3333}
