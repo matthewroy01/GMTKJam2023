@@ -179,7 +179,19 @@ namespace PlatformFighter.Character
                     
                     Vector2 closestPoint = tmp.ClosestPoint(transform.position);
                     Instantiate(_hitParts, closestPoint, Quaternion.identity);
-                    TakeDamage(25.0f, closestPoint);
+
+                    CharacterKnockbackType characterKnockbackType = CharacterKnockbackType.Default;
+                    if (tmp.gameObject.GetComponentInParent<Character>() != null)
+                    {
+                        characterKnockbackType = CharacterKnockbackType.FromCharacter;
+                    }
+
+                    if (tmp.gameObject.GetComponentInParent<PlayerPlatform>() != null)
+                    {
+                        characterKnockbackType = CharacterKnockbackType.FromPlayer;
+                    }
+                    
+                    TakeDamage(25.0f, closestPoint, characterKnockbackType);
                 }
 
                 _collidingWithDamage = true;
@@ -189,15 +201,21 @@ namespace PlatformFighter.Character
             _collidingWithDamage = false;
         }
 
-        private void TakeDamage(float damage, Vector2 source)
+        private void TakeDamage(float damage, Vector2 source, CharacterKnockbackType characterKnockbackType)
         {
             _damagePercentage += damage;
 
             bool below = transform.position.y < source.y;
-            float downwardsBonus = below ? 2.0f : 1.0f;
+            float downwardsBonus = below && characterKnockbackType == CharacterKnockbackType.FromPlayer ? 2.0f : 1.0f;
+            
+            float fromCharacterDebuff = characterKnockbackType == CharacterKnockbackType.FromCharacter ? 0.5f : 1.0f;
 
             Vector2 direction = ((Vector2)transform.position - source).normalized;
-            float knockback = (_baseKnockbackForce + _damagePercentage) * _definition.WeightModifier;
+            
+            float knockback = _baseKnockbackForce + _damagePercentage;
+            knockback *= _definition.WeightModifier;
+            knockback *= fromCharacterDebuff;
+            
             Rigidbody2D.AddForce(direction * knockback);
             Rigidbody2D.AddForce((below ? Vector2.down : Vector2.up) * (knockback * 0.75f * downwardsBonus));
             
